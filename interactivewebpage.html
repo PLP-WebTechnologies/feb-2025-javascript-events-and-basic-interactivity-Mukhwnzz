@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Concepts Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+        #counter {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+        #colorBox {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border: 1px solid #000;
+            transition: background-color 0.3s;
+        }
+        .toggle-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Concepts Demonstration</h1>
+
+    <!-- Section 1: Event Listeners -->
+    <div class="container">
+        <h2>1. Event Listeners</h2>
+        <div class="toggle-container">
+            <button id="toggleButton">Click Me!</button>
+            <p id="toggleText" class="hidden">You revealed this text with an event listener!</p>
+        </div>
+        
+        <div id="counter">0</div>
+        <button id="incrementBtn">Increment Counter</button>
+        <button id="decrementBtn">Decrement Counter</button>
+    </div>
+
+    <!-- Section 2: Form Validation -->
+    <div class="container">
+        <h2>2. Form Validation</h2>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+                <div id="nameError" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+                <div id="emailError" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password (min 8 characters):</label>
+                <input type="password" id="password" required>
+                <div id="passwordError" class="error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" min="18" max="120">
+                <div id="ageError" class="error"></div>
+            </div>
+            
+            <button type="submit">Register</button>
+        </form>
+        <div id="formSuccess" class="hidden" style="color: green; margin-top: 15px;">
+            Form submitted successfully!
+        </div>
+    </div>
+
+    <!-- Section 3: Interactive Elements -->
+    <div class="container">
+        <h2>3. Interactive Elements</h2>
+        
+        <div id="colorBox"></div>
+        <button id="changeColorBtn">Change Color</button>
+        
+        <div style="margin-top: 20px;">
+            <label for="colorSelect">Or select a color:</label>
+            <select id="colorSelect">
+                <option value="#ff0000">Red</option>
+                <option value="#00ff00">Green</option>
+                <option value="#0000ff">Blue</option>
+                <option value="#ffff00">Yellow</option>
+                <option value="#ff00ff">Magenta</option>
+            </select>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <h3>Hover over me!</h3>
+            <div id="hoverArea" style="padding: 20px; background-color: #f0f0f0; border-radius: 5px;">
+                Move your mouse here to see the effect
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 1. Event Listeners ==========
+        
+        // Toggle text visibility
+        const toggleButton = document.getElementById('toggleButton');
+        const toggleText = document.getElementById('toggleText');
+        
+        toggleButton.addEventListener('click', function() {
+            toggleText.classList.toggle('hidden');
+            this.textContent = toggleText.classList.contains('hidden') ? 'Click Me!' : 'Hide Text';
+        });
+        
+        // Counter functionality
+        const counter = document.getElementById('counter');
+        const incrementBtn = document.getElementById('incrementBtn');
+        const decrementBtn = document.getElementById('decrementBtn');
+        let count = 0;
+        
+        incrementBtn.addEventListener('click', function() {
+            count++;
+            counter.textContent = count;
+        });
+        
+        decrementBtn.addEventListener('click', function() {
+            count--;
+            counter.textContent = count;
+        });
+        
+        // ========== 2. Form Validation ==========
+        
+        const form = document.getElementById('registrationForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const ageInput = document.getElementById('age');
+        const formSuccess = document.getElementById('formSuccess');
+        
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            let isValid = true;
+            
+            // Reset errors
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+            
+            // Name validation
+            if (nameInput.value.trim() === '') {
+                document.getElementById('nameError').textContent = 'Name is required';
+                isValid = false;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email';
+                isValid = false;
+            }
+            
+            // Password validation
+            if (passwordInput.value.length < 8) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters';
+                isValid = false;
+            }
+            
+            // Age validation
+            if (ageInput.value && (ageInput.value < 18 || ageInput.value > 120)) {
+                document.getElementById('ageError').textContent = 'Age must be between 18 and 120';
+                isValid = false;
+            }
+            
+            // If form is valid
+            if (isValid) {
+                formSuccess.classList.remove('hidden');
+                form.reset();
+                setTimeout(() => formSuccess.classList.add('hidden'), 3000);
+            }
+        });
+        
+        // ========== 3. Interactive Elements ==========
+        
+        // Color changing box
+        const colorBox = document.getElementById('colorBox');
+        const changeColorBtn = document.getElementById('changeColorBtn');
+        const colorSelect = document.getElementById('colorSelect');
+        
+        changeColorBtn.addEventListener('click', function() {
+            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+            colorBox.style.backgroundColor = randomColor;
+        });
+        
+        colorSelect.addEventListener('change', function() {
+            colorBox.style.backgroundColor = this.value;
+        });
+        
+        // Hover effect
+        const hoverArea = document.getElementById('hoverArea');
+        const originalColor = hoverArea.style.backgroundColor;
+        
+        hoverArea.addEventListener('mouseover', function() {
+            this.style.backgroundColor = '#e0e0e0';
+            this.style.transform = 'scale(1.02)';
+            this.style.transition = 'all 0.3s';
+        });
+        
+        hoverArea.addEventListener('mouseout', function() {
+            this.style.backgroundColor = originalColor;
+            this.style.transform = 'scale(1)';
+        });
+    </script>
+</body>
+</html>
